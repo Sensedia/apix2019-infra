@@ -5,12 +5,22 @@ services:
   rabbitmq:
     image: rabbitmq:3-management
     container_name: rabbitmq_apix2019
+    restart: on-failure
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 200m
     networks: 
       - apix2019
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.0.1
     container_name: elasticsearch_apix2019
+    restart: on-failure
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 200m
     networks: 
       - apix2019
     environment:
@@ -19,6 +29,11 @@ services:
   kibana:
     image: docker.elastic.co/kibana/kibana:7.0.1
     container_name: kibana_apix2019
+    restart: on-failure
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 200m
     ports: 
       - 5601:5601
     networks: 
@@ -32,6 +47,11 @@ services:
   logstash:
     image: docker.elastic.co/logstash/logstash:7.0.1
     container_name: logstash_apix2019
+    restart: on-failure
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 200m
     ports:
       - "9600:9600"
       - "9800:9800"
@@ -40,8 +60,11 @@ services:
     depends_on: 
       - elasticsearch
       - rabbitmq
+    links:
+      - elasticsearch:elasticsearch
     environment:
       XPACK_MONITORING_ENABLED: "false"
+      RABBIT_RECOMMENDATION_QUEUE: 'apix-recommendation-queue'
     volumes:
       - ./logstash/pipeline.conf:/usr/share/logstash/pipeline/logstash-pipeline.conf
 
