@@ -1,0 +1,48 @@
+---
+version: '3.6'
+services:
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq_apix2019
+    networks: 
+      - apix2019
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.0.1
+    container_name: elasticsearch_apix2019
+    networks: 
+      - apix2019
+    environment:
+      discovery.type: single-node
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.0.1
+    container_name: kibana_apix2019
+    ports: 
+      - 5601:5601
+    networks: 
+      - apix2019
+    depends_on: 
+      - elasticsearch
+    environment:
+      SERVER_NAME: localhost
+      ELASTICSEARCH_URL: http://elasticsearch_apix2019:9200
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.0.1
+    container_name: logstash_apix2019
+    ports:
+      - "9600:9600"
+      - "9800:9800"
+    networks: 
+      - apix2019
+    depends_on: 
+      - elasticsearch
+      - rabbitmq
+    environment:
+      XPACK_MONITORING_ENABLED: "false"
+    volumes:
+      - ./logstash/pipeline.conf:/usr/share/logstash/pipeline/logstash-pipeline.conf
+
+networks: {apix2019: {}}
