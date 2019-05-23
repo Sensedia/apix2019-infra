@@ -26,6 +26,10 @@ services:
       driver: "json-file"
       options:
         max-size: 200m
+    ports:
+      - "9090:15672"
+      - "5672:5672"
+      - "25676:25676"
     networks:
       - apix2019
 
