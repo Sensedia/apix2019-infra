@@ -2,6 +2,22 @@
 version: '3.6'
 services:
 
+  mysql:
+    image: mysql:5.7
+    container_name: mysql_apix2019
+    restart: on-failure
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 500m
+    ports:
+      - "3306:3306"
+    environment:
+       MYSQL_ROOT_PASSWORD: apix2019
+       MYSQL_DATABASE: apix2019
+    networks:
+      - apix2019
+
   rabbitmq:
     image: rabbitmq:3-management
     container_name: rabbitmq_apix2019
@@ -10,7 +26,7 @@ services:
       driver: "json-file"
       options:
         max-size: 200m
-    networks: 
+    networks:
       - apix2019
 
   elasticsearch:
@@ -21,7 +37,7 @@ services:
       driver: "json-file"
       options:
         max-size: 200m
-    networks: 
+    networks:
       - apix2019
     environment:
       discovery.type: single-node
@@ -34,11 +50,11 @@ services:
       driver: "json-file"
       options:
         max-size: 200m
-    ports: 
+    ports:
       - 5601:5601
-    networks: 
+    networks:
       - apix2019
-    depends_on: 
+    depends_on:
       - elasticsearch
     environment:
       SERVER_NAME: localhost
@@ -55,9 +71,9 @@ services:
     ports:
       - "9600:9600"
       - "9800:9800"
-    networks: 
+    networks:
       - apix2019
-    depends_on: 
+    depends_on:
       - elasticsearch
       - rabbitmq
     links:
