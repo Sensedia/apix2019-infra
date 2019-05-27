@@ -96,7 +96,7 @@ services:
       - elasticsearch:elasticsearch
     environment:
       XPACK_MONITORING_ENABLED: "false"
-      RABBIT_RECOMMENDATION_QUEUE: "${RABBIT_RECOMMENDATION_QUEUE:-apix-recommendation-queue}"
+      RABBIT_SUGGESTION_QUEUE: "${RABBIT_SUGGESTION_QUEUE:-apix-suggestion-queue}"
     volumes:
       - ./logstash/pipeline.conf:/usr/share/logstash/pipeline/logstash-pipeline.conf
 
