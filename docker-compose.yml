@@ -39,6 +39,9 @@ services:
       - "15672:15672"
       - "5672:5672"
       - "25676:25676"
+    volumes:
+      - ./rabbitmq/definitions/definitions.json:/opt/definitions.json:ro
+      - ./rabbitmq/config/rabbitmq.config:/etc/rabbitmq/rabbitmq.config:ro
     networks:
       - apix2019
 
