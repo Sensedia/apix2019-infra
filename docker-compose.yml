@@ -1,5 +1,12 @@
 ---
 version: '3.6'
+
+volumes:
+  grafana:
+  prometheus:
+  alertmanager:
+  mysql:
+
 services:
 
   mysql:
@@ -12,6 +19,8 @@ services:
         max-size: 500m
     ports:
       - "3306:3306"
+    volumes:
+      - mysql:/var/lib/mysql
     environment:
        MYSQL_ROOT_PASSWORD: apix2019
        MYSQL_DATABASE: apix2019
@@ -27,7 +36,7 @@ services:
       options:
         max-size: 200m
     ports:
-      - "9090:15672"
+      - "15672:15672"
       - "5672:5672"
       - "25676:25676"
     networks:
@@ -88,4 +97,137 @@ services:
     volumes:
       - ./logstash/pipeline.conf:/usr/share/logstash/pipeline/logstash-pipeline.conf
 
-networks: {apix2019: {}}
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus_apix2019
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 500m
+    user: root
+    volumes:
+      - ./prometheus/:/etc/prometheus/
+      - prometheus:/prometheus
+    command:
+      - '--storage.tsdb.path=/prometheus'
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.retention=365d'
+      - '--web.enable-admin-api'
+      - '--web.enable-lifecycle'
+    expose:
+      - 9090
+    ports:
+      - 9090:9090
+    links:
+      - node-exporter:node-exporter
+      - alertmanager:alertmanager
+      - blackbox:blackbox
+      - cadvisor:cadvisor
+    networks:
+      - apix2019
+
+  node-exporter:
+    image: prom/node-exporter
+    container_name: node-exporter_apix2019
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 500m
+    volumes:
+      - /proc:/host/proc
+      - /sys:/host/sysfs
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sysfs'
+      - '--collector.filesystem.ignored-mount-points="^/(sys|proc|dev|host|etc)($$|/)"'
+    expose:
+      - 9100
+    ports:
+      - 9100:9100
+    networks:
+      - apix2019
+
+  alertmanager:
+    image: prom/alertmanager
+    container_name: alertmanager_apix2019
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 500m
+    ports:
+      - 9093:9093
+    volumes:
+      - alertmanager:/alertmanager
+      - ./alertmanager/config.yml:/etc/alertmanager/config.yml
+    networks:
+      - apix2019
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/alertmanager'
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana_apix2019
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 500m
+    links:
+      - prometheus:prometheus
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    networks:
+      - apix2019
+
+  blackbox:
+    image: prom/blackbox-exporter
+    container_name: blackbox_apix2019
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 500m
+    ports:
+      - 9115:9115
+    volumes:
+      - ./blackbox:/config
+    networks:
+      - apix2019
+    command:
+      - '--config.file=/config/blackbox.yml'
+
+  cadvisor:
+    image: "google/cadvisor"
+    container_name: cadvisor_apix2019
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 500m
+    privileged: true
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    expose:
+      - 8080
+    ports:
+      - "8080:8080"
+    networks:
+      - apix2019
+
+networks:
+  apix2019:
+    driver: bridge

@@ -1,0 +1,16 @@
+global:
+  slack_api_url: 'SLACK_API_URL'
+
+route:
+  receiver: 'slack-notifications'
+  repeat_interval: 1h
+  group_by: ['alertname']
+
+receivers:
+  - name: 'slack-notifications'
+    slack_configs:
+      - send_resolved: true
+        username: 'Prometheus Bot'
+        channel: 'fail-alert'
+        title: "{{ range .Alerts }}{{ .Annotations.summary }}\n{{ end }}"
+        text: "{{ range .Alerts }}{{ .Annotations.description }}\n{{ end }}"
