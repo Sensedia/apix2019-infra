@@ -3,6 +3,7 @@ version: '3.6'
 
 volumes:
   grafana:
+  elasticsearch:
   prometheus:
   alertmanager:
   mysql:
@@ -16,7 +17,7 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: 500m
+        max-size: 200m
     ports:
       - "3306:3306"
     volumes:
@@ -55,6 +56,8 @@ services:
         max-size: 200m
     ports:
       - "9200:9200"
+    volumes:
+      - elasticsearch:/usr/share/elasticsearch/data
     networks:
       - apix2019
     environment:
@@ -102,6 +105,24 @@ services:
     volumes:
       - ./logstash/pipeline.conf:/usr/share/logstash/pipeline/logstash-pipeline.conf
 
+  fluentd:
+    build: ./fluentd
+    container_name: fluentd_apix2019
+    restart: on-failure
+    volumes:
+      - ./fluentd/conf:/fluentd/etc
+    links:
+      - "elasticsearch"
+    ports:
+      - "24224:24224"
+      - "24224:24224/udp"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 200m
+    networks:
+      - apix2019
+
   prometheus:
     image: prom/prometheus
     container_name: prometheus_apix2019
@@ -109,7 +130,7 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: 500m
+        max-size: 200m
     user: root
     volumes:
       - ./prometheus/:/etc/prometheus/
@@ -139,7 +160,7 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: 500m
+        max-size: 200m
     volumes:
       - /proc:/host/proc
       - /sys:/host/sysfs
@@ -162,7 +183,7 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: 500m
+        max-size: 200m
     ports:
       - 9093:9093
     volumes:
@@ -181,7 +202,7 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: 500m
+        max-size: 200m
     links:
       - prometheus:prometheus
     ports:
@@ -201,7 +222,7 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: 500m
+        max-size: 200m
     ports:
       - 9115:9115
     volumes:
@@ -218,7 +239,7 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: 500m
+        max-size: 200m
     privileged: true
     volumes:
       - /:/rootfs:ro
