@@ -214,6 +214,7 @@ services:
       - GF_USERS_ALLOW_SIGN_UP=false
     networks:
       - apix2019
+      - apix2019-grafana
 
   blackbox:
     image: prom/blackbox-exporter
@@ -256,4 +257,6 @@ services:
 
 networks:
   apix2019:
+    driver: bridge
+  apix2019-grafana:
     driver: bridge
