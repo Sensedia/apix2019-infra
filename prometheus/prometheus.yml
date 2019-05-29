@@ -15,7 +15,7 @@ alerting:
 scrape_configs:
   
     #Sensedia
-  - job_name: 'server'
+  - job_name: 'linux-apix-vm'
     static_configs:
     - targets: ['node-exporter:9100']
 
