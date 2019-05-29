@@ -138,7 +138,7 @@ services:
     command:
       - '--storage.tsdb.path=/prometheus'
       - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.retention=365d'
+      - '--storage.tsdb.retention.time=30d'
       - '--web.enable-admin-api'
       - '--web.enable-lifecycle'
     expose:
