@@ -217,7 +217,7 @@ services:
       - apix2019-grafana
 
   blackbox:
-    image: prom/blackbox-exporter
+    image: prom/blackbox-exporter:latest
     container_name: blackbox_apix2019
     restart: always
     logging:
