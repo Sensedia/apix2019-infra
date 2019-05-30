@@ -609,7 +609,7 @@
           "expr": "irate(node_network_transmit_bytes_total{device!=\"lo\"}[5m])",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "{{job}}",
+          "legendFormat": "{{job}}-{{device}}",
           "refId": "A"
         }
       ],
@@ -698,7 +698,7 @@
           "expr": "irate(node_network_receive_bytes_total{device!=\"lo\"}[5m])",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "{{job}}",
+          "legendFormat": "{{job}}-{{device}}",
           "refId": "A"
         }
       ],
@@ -963,5 +963,5 @@
   "timezone": "",
   "title": "APIX",
   "uid": "zLQhxuggz",
-  "version": 15
+  "version": 21
 }
