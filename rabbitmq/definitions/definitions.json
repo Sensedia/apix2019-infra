@@ -48,6 +48,15 @@
       }
     },
     {
+      "name":"apix-pre-specification-queue",
+      "vhost":"/",
+      "durable":false,
+      "auto_delete":false,
+      "arguments":{
+
+      }
+    },
+    {
       "name":"apix-kit-queue",
       "vhost":"/",
       "durable":false,
@@ -84,10 +93,25 @@
       }
     }
   ],
-  "exchanges":[
-
+  "exchanges": [
+    {
+      "name": "specification",
+      "vhost": "/",
+      "type": "direct",
+      "durable": false,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    }
   ],
-  "bindings":[
-
+  "bindings": [
+    {
+      "source": "specification",
+      "vhost": "/",
+      "destination": "apix-specification-queue",
+      "destination_type": "queue",
+      "routing_key": "logstash",
+      "arguments": {}
+    }
   ]
 }

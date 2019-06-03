@@ -101,9 +101,15 @@ services:
       - elasticsearch:elasticsearch
     environment:
       XPACK_MONITORING_ENABLED: "false"
+      ES_SUGGESTION_INDEX: "${ES_SUGGESTION_INDEX:-suggestion}"
       RABBIT_SUGGESTION_QUEUE: "${RABBIT_SUGGESTION_QUEUE:-apix-suggestion-queue}"
+      RABBIT_SPECIFICATION_EXCHANGE: "${RABBIT_SPECIFICATION_EXCHANGE:-specification}"
+      RABBIT_SPECIFICATION_QUEUE: "${RABBIT_SPECIFICATION_QUEUE:-apix-specification-queue}"
+      RABBIT_PRE_SPECIFICATION_QUEUE: "${RABBIT_PRE_SPECIFICATION_QUEUE:-apix-pre-specification-queue}"
     volumes:
-      - ./logstash/pipeline.conf:/usr/share/logstash/pipeline/logstash-pipeline.conf
+      - ./logstash/suggestion-pipeline.conf:/usr/share/logstash/suggestion-pipeline.conf
+      - ./logstash/specification-pipeline.conf:/usr/share/logstash/specification-pipeline.conf
+      - ./logstash/pipelines.yml:/usr/share/logstash/config/pipelines.yml
 
   fluentd:
     build: ./fluentd
