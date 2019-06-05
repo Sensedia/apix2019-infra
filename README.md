@@ -69,7 +69,7 @@ Contudo, se você é root e gosta de linha de comando:
 $ export COMPOSE_PROJECT_NAME=apix2019infra
 $ docker-compose down
 $ docker-compose build --no-cache
-$ docker-compose -f docker-compose-trilha-basica.yml up -d
+$ docker-compose -f docker-compose-trilha-basica.yml up -d --remove-orphans
 ```
 
 

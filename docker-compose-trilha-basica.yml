@@ -2,10 +2,6 @@
 version: '3.6'
 
 volumes:
-  grafana:
-  elasticsearch:
-  prometheus:
-  alertmanager:
   mysql:
 
 services:
@@ -30,6 +26,4 @@ services:
 
 networks:
   apix2019:
-    driver: bridge
-  apix2019-grafana:
     driver: bridge
