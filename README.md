@@ -41,19 +41,37 @@ $ docker-compose pull
 
 Dependendo da sua conexão com a internet o download pode levar até 20 minutos.
 
-# Como iniciar os containers
+# Como iniciar os containers na trilha avançada
 
-Os containers já estão configurados para iniciar automaticamente na máquina virtual de desenvolvimento fornecida pela Sensedia. Porem, caso necessite iniciar ou reiniciar algum container, a forma mais fácil de fazê-lo é:
+Você precisa iniciar a stack de aplicações utilizada ao longo do APIX, durante o desenvolvimento. A forma mais fácil de fazê-lo, na trilha avançada, é:
 ```
 $ cd apix2019-infra
-$ ./apix2019-infra-start.sh
+$ ./apix2019-infra-avancado.sh
 ```
 Contudo, se você é root e gosta de linha de comando:
 ```
+$ export COMPOSE_PROJECT_NAME=apix2019infra
 $ docker-compose down
 $ docker-compose build --no-cache
 $ docker-compose up -d
 ```
+
+
+# Como iniciar os containers na trilha básica
+
+Você precisa iniciar a stack de aplicações utilizada ao longo do APIX, durante o desenvolvimento. A forma mais fácil de fazê-lo, na trilha avançada, é:
+```
+$ cd apix2019-infra
+$ ./apix2019-infra-basico.sh
+```
+Contudo, se você é root e gosta de linha de comando:
+```
+$ export COMPOSE_PROJECT_NAME=apix2019infra
+$ docker-compose down
+$ docker-compose build --no-cache
+$ docker-compose -f docker-compose-trilha-basica.yml up -d --remove-orphans
+```
+
 
 # Como enviar os logs dos micro serviços para o Fluentd
 

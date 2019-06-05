@@ -1,0 +1,29 @@
+---
+version: '3.6'
+
+volumes:
+  mysql:
+
+services:
+
+  mysql:
+    image: mysql:5.7
+    container_name: mysql_apix2019
+    restart: on-failure
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 200m
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql:/var/lib/mysql
+    environment:
+       MYSQL_ROOT_PASSWORD: apix2019
+       MYSQL_DATABASE: apix2019
+    networks:
+      - apix2019
+
+networks:
+  apix2019:
+    driver: bridge

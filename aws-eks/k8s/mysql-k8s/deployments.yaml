@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mysql-apix2019 
+  namespace: apix2019
+spec:
+  replicas: 1 
+  template:
+    metadata:
+      labels:
+        app: mysql-apix2019
+    spec:
+      containers:
+      - name: mysql-apix2019
+        image: mysql:5.7
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3306
+        
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "apix2019"
+        - name: MYSQL_DATABASE
+          value: "apix2019"
+

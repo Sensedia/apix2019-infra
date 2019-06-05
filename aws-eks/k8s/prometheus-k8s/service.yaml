@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-apix2019
+  namespace: apix2019
+  labels:
+    app: prometheus-apix2019
+    project: apix2019
+spec:
+  selector:
+    app: prometheus-apix2019
+  type: NodePort 
+  ports:
+  - port: 9090
+    nodePort: 30003
+    protocol: TCP

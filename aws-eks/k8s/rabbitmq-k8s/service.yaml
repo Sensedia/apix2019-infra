@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq-apix2019
+  namespace: apix2019
+  labels:
+    app: rabbitmq-apix2019
+    project: apix2019
+spec:
+  selector:
+    app: rabbitmq-apix2019
+  type: NodePort 
+  ports:
+  - port: 5672
+    nodePort: 30007
+    protocol: TCP
