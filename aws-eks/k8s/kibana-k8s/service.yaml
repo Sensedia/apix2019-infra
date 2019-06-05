@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kibana-apix2019
+  namespace: apix2019
+  labels:
+    app: kibana-apix2019
+    project: apix2019
+spec:
+  selector:
+    app: kibana-apix2019
+  type: NodePort 
+  ports:
+  - port: 5601
+    nodePort: 30004
+    protocol: TCP

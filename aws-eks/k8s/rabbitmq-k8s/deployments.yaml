@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: rabbitmq-apix2019 
+  namespace: apix2019
+spec:
+  replicas: 1 
+  template:
+    metadata:
+      labels:
+        app: rabbitmq-apix2019
+    spec:
+      containers:
+      - name: rabbitmq-apix2019
+        image: rabbitmq:3-management 
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5672

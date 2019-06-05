@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: kibana-apix2019 
+  namespace: apix2019
+spec:
+  replicas: 1 
+  template:
+    metadata:
+      labels:
+        app: kibana-apix2019
+    spec:
+      containers:
+      - name: kibana-apix2019
+        image: docker.elastic.co/kibana/kibana:7.0.1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5601
+        
+        env:
+        - name: SERVER_NANE
+          value: "localhost"
+        - name: ELASTICSEARCH_URL
+          value: "elasticsearch-apix.apix2018.svc.cluster.local"

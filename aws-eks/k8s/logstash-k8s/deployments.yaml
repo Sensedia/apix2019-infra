@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: logstash-apix2019 
+  namespace: apix2019
+spec:
+  replicas: 1 
+  template:
+    metadata:
+      labels:
+        app: logstash-apix2019
+    spec:
+      containers:
+      - name: logstash-apix2019
+        image: docker.elastic.co/logstash/logstash:7.0.1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9600
+        
+        env:
+        - name: XPACK_MONITORING_ENABLED
+          value: "false"
+        - name: RABBIT_SUGGESTION_QUEUE
+          value: "${RABBIT_SUGGESTION_QUEUE:-apix-suggestion-queue}"
+

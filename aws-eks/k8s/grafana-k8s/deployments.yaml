@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: grafana-apix2019 
+  namespace: apix2019
+spec:
+  replicas: 1 
+  template:
+    metadata:
+      labels:
+        app: grafana-apix2019
+    spec:
+      containers:
+      - name: grafana-apix2019
+        image: grafana/grafana
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+        env:
+        - name: GF_SECURITY_ADMIN_PASSWORD
+          value: admin
+        - name: GF_USERS_ALLOW_SIGN_UP
+          value: "false"
