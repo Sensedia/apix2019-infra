@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: apix2019-microservice-notification-kotlin 
+  namespace: apix2019
+spec:
+  replicas: 1 
+  template:
+    metadata:
+      labels:
+        app: apix2019-microservice-notification-kotlin
+    spec:
+      containers:
+      - name: apix2019-microservice-notification-kotlin
+        image: XXrepoXX
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9200

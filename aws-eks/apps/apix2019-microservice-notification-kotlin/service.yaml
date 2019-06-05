@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: apix2019-microservice-notification-kotlin
+  namespace: apix2019
+  labels:
+    app: apix2019-microservice-notification-kotlin
+    project: apix2019
+spec:
+  selector:
+    app: apix2019-microservice-notification-kotlin 
+  type: NodePort 
+  ports:
+  - port: 9200
+    nodePort: 30012
+    protocol: TCP
